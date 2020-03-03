@@ -1,36 +1,44 @@
 package com.example.api_hw_week7.repository;
 
 import com.example.api_hw_week7.model.ListOfCurrences;
-import com.example.api_hw_week7.model.Query;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.CrossOrigin;
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.stereotype.Repository;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 
-@Component
+@Getter
+@Setter
+@Repository
 public class RateRepository {
 
-    @Autowired
-    private QueryRepository queryRepository;
+
+    private String lastQuery;
 
     private List<ListOfCurrences> currences;
+    String url = "http://api.nbp.pl/api/exchangerates/tables/a/";
 
-    public RateRepository() throws JsonProcessingException {
+    public RateRepository() {
 
     }
 
     public List<ListOfCurrences> getCurrences() throws JsonProcessingException {
+
+
         RestTemplate restTemplate = new RestTemplate();
-        String jsonStr = restTemplate.getForObject("http://api.nbp.pl/api/exchangerates/tables/a/", String.class);
+        String jsonStr = restTemplate.getForObject(url, String.class);
 
         ObjectMapper mapper = new ObjectMapper();
-        currences = mapper.readValue(jsonStr,new TypeReference<List<ListOfCurrences>>(){});
+        currences = mapper.readValue(jsonStr, new TypeReference<List<ListOfCurrences>>() {
+        });
+
+        lastQuery = "http://api.nbp.pl/api/exchangerates/tables/a/";
 
         return currences;
     }
+
 }

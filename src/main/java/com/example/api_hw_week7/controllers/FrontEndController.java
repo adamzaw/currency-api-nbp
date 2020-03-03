@@ -6,22 +6,18 @@ import com.example.api_hw_week7.model.Query;
 import com.example.api_hw_week7.repository.QueryRepository;
 import com.example.api_hw_week7.repository.RateRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestOperations;
-import org.springframework.web.client.RestTemplate;
 
-import javax.servlet.http.HttpServletRequest;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
 @CrossOrigin
 @RestController
 public class FrontEndController {
-    ObjectMapper objectMapper = new ObjectMapper();
-    RestTemplate restTemplate = new RestTemplate();
+
+    RateRepository rateRepository = new RateRepository();
 
     @Autowired
     private QueryRepository queryRepository;
@@ -34,26 +30,25 @@ public class FrontEndController {
     public List<String> list() throws JsonProcessingException {
 
 
-        final String output = restTemplate.getForObject("http://api.nbp.pl/api/exchangerates/tables/a/", String.class);
-        List<ListOfCurrences> currencesList = objectMapper.readValue(output, new TypeReference<List<ListOfCurrences>>() {});
+        List<ListOfCurrences> currencesList = rateRepository.getCurrences();
 
         queryRepository.save(new Query("/api/list/"));
-        queryRepository.save(new Query("http://api.nbp.pl/api/exchangerates/tables/a/"));
+        queryRepository.save(new Query(rateRepository.getLastQuery()));
 
 
         return currencesList.get(0).getCurrencies().stream()
-                .map(currency -> currency.getName()+", code: "+currency.getCode())
+                .map(currency -> currency.getName() + ", code: " + currency.getCode())
                 .collect(Collectors.toList());
     }
 
     @GetMapping("/api/exchange/{value}/{first}/{second}")
     public String exchange(@PathVariable Double value, @PathVariable String first, @PathVariable String second) throws JsonProcessingException {
 
-        final String output = restTemplate.getForObject("http://api.nbp.pl/api/exchangerates/tables/a/", String.class);
-        List<ListOfCurrences> currencesList = objectMapper.readValue(output, new TypeReference<List<ListOfCurrences>>() {});
+
+        List<ListOfCurrences> currencesList = rateRepository.getCurrences();
 
 
-        queryRepository.save(new Query("/api/exchange/"+ value+ "/" + first + "/" + second));
+        queryRepository.save(new Query("/api/exchange/" + value + "/" + first + "/" + second));
 
 
         List<Currency> list = currencesList.get(0).getCurrencies();
@@ -77,11 +72,10 @@ public class FrontEndController {
     public List<ListOfCurrences> actualList() throws JsonProcessingException {
 
 
-        final String output = restTemplate.getForObject("http://api.nbp.pl/api/exchangerates/tables/a/", String.class);
-        List<ListOfCurrences> currencesList = objectMapper.readValue(output, new TypeReference<List<ListOfCurrences>>() {});
+        List<ListOfCurrences> currencesList = rateRepository.getCurrences();
 
         queryRepository.save(new Query("/api/list/"));
-        queryRepository.save(new Query("http://api.nbp.pl/api/exchangerates/tables/a/"));
+        queryRepository.save(new Query(rateRepository.getLastQuery()));
 
 
         return currencesList;
