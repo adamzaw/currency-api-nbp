@@ -40,9 +40,9 @@ public class FrontEndController {
         return listOfCurrencesMapper.listOfCurrenciesToDto();
     }
 
-    @ApiImplicitParams(value = {@ApiImplicitParam(name = "value", value = "", dataType = "java.lang.Double"),
-            @ApiImplicitParam(name = "first", value = "", dataType = "java.lang.String"),
-            @ApiImplicitParam(name = "second", value = "", dataType = "java.lang.String")})
+    @ApiImplicitParams(value = {@ApiImplicitParam(name = "value", value = "Amount of money", dataType = "java.lang.Double"),
+            @ApiImplicitParam(name = "first", value = "ISO 4217 currency code", dataType = "java.lang.String"),
+            @ApiImplicitParam(name = "second", value = "ISO 4217 currency code", dataType = "java.lang.String")})
     @ApiOperation("")
     @GetMapping("/api/exchange/{value}/{first}/{second}")
     public ExchangeResultDto exchange(@PathVariable Double value, @PathVariable String first, @PathVariable String second) throws JsonProcessingException {
