@@ -12,7 +12,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class ListOfCurrences {
+public class ListOfCurrencies {
 
     @JsonProperty("rates")
     private List<Currency> currencies;

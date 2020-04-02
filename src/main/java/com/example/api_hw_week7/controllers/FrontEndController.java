@@ -1,84 +1,64 @@
 package com.example.api_hw_week7.controllers;
 
-import com.example.api_hw_week7.model.Currency;
-import com.example.api_hw_week7.model.ListOfCurrences;
+import com.example.api_hw_week7.dto.*;
 import com.example.api_hw_week7.model.Query;
 import com.example.api_hw_week7.repository.QueryRepository;
-import com.example.api_hw_week7.repository.RateRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 
-import java.util.List;
-import java.util.stream.Collectors;
+import io.swagger.annotations.*;
 
-@CrossOrigin
+@Api(value = "", description = "")
 @RestController
 public class FrontEndController {
 
-    RateRepository rateRepository = new RateRepository();
+    @Autowired
+    private ExchangeResultMapper exchangeResultMapper;
+
+    @Autowired
+    private ListOfCurrenciesMapper listOfCurrencesMapper;
+
+    @Autowired
+    private ActualListMapper actualListMapper;
+
 
     @Autowired
     private QueryRepository queryRepository;
 
-    public FrontEndController() throws JsonProcessingException {
+       public FrontEndController() throws JsonProcessingException {
     }
 
-
+    @ApiImplicitParams(value = {})
+    @ApiOperation("")
     @GetMapping("/api/list")
-    public List<String> list() throws JsonProcessingException {
-
-
-        List<ListOfCurrences> currencesList = rateRepository.getCurrences();
+    public ListOfCurrenciesDto list() throws JsonProcessingException {
 
         queryRepository.save(new Query("/api/list/"));
-        queryRepository.save(new Query(rateRepository.getLastQuery()));
 
-
-        return currencesList.get(0).getCurrencies().stream()
-                .map(currency -> currency.getName() + ", code: " + currency.getCode())
-                .collect(Collectors.toList());
+        return listOfCurrencesMapper.listOfCurrenciesToDto();
     }
 
+    @ApiImplicitParams(value = {@ApiImplicitParam(name = "value", value = "", dataType = "java.lang.Double"),
+            @ApiImplicitParam(name = "first", value = "", dataType = "java.lang.String"),
+            @ApiImplicitParam(name = "second", value = "", dataType = "java.lang.String")})
+    @ApiOperation("")
     @GetMapping("/api/exchange/{value}/{first}/{second}")
-    public String exchange(@PathVariable Double value, @PathVariable String first, @PathVariable String second) throws JsonProcessingException {
-
-
-        List<ListOfCurrences> currencesList = rateRepository.getCurrences();
-
+    public ExchangeResultDto exchange(@PathVariable Double value, @PathVariable String first, @PathVariable String second) throws JsonProcessingException {
 
         queryRepository.save(new Query("/api/exchange/" + value + "/" + first + "/" + second));
 
-
-        List<Currency> list = currencesList.get(0).getCurrencies();
-        Double firstValue = 0.00;
-        Double secondValue = 0.00;
-        if (!list.isEmpty()) {
-            for (Currency currence : list) {
-                if (currence.getCode().equalsIgnoreCase(first)) {
-                    firstValue = currence.getMid();
-                } else if (currence.getCode().equalsIgnoreCase(second)) {
-                    secondValue = currence.getMid();
-                }
-            }
-        }
-        Double result = (Double.valueOf(value) * Double.valueOf(firstValue)) / Double.valueOf(secondValue);
-
-        return "{\"" + second + "\": \"" + String.format("%.3f", result) + "\"}";
+        return exchangeResultMapper.exchangeResultToDto(value, first, second);
     }
 
+    @ApiImplicitParams(value = {})
+    @ApiOperation("")
     @GetMapping("/api/actuallist")
-    public List<ListOfCurrences> actualList() throws JsonProcessingException {
-
-
-        List<ListOfCurrences> currencesList = rateRepository.getCurrences();
+    public ActualListDto actualList() throws JsonProcessingException {
 
         queryRepository.save(new Query("/api/list/"));
-        queryRepository.save(new Query(rateRepository.getLastQuery()));
 
-
-        return currencesList;
-
+        return actualListMapper.actualListDto();
     }
 }
