@@ -12,6 +12,7 @@ import io.swagger.annotations.*;
 
 @Api(value = "", description = "")
 @RestController
+@CrossOrigin
 public class FrontEndController {
 
     @Autowired
@@ -30,8 +31,9 @@ public class FrontEndController {
        public FrontEndController() throws JsonProcessingException {
     }
 
+
     @ApiImplicitParams(value = {})
-    @ApiOperation("")
+    @ApiOperation(value = "Showing list of all currencies with rate")
     @GetMapping("/api/list")
     public ListOfCurrenciesDto list() throws JsonProcessingException {
 
@@ -43,7 +45,7 @@ public class FrontEndController {
     @ApiImplicitParams(value = {@ApiImplicitParam(name = "value", value = "Amount of money", dataType = "java.lang.Double"),
             @ApiImplicitParam(name = "first", value = "ISO 4217 currency code", dataType = "java.lang.String"),
             @ApiImplicitParam(name = "second", value = "ISO 4217 currency code", dataType = "java.lang.String")})
-    @ApiOperation("")
+    @ApiOperation(value = "Calculating value of exchange from one currency to another")
     @GetMapping("/api/exchange/{value}/{first}/{second}")
     public ExchangeResultDto exchange(@PathVariable Double value, @PathVariable String first, @PathVariable String second) throws JsonProcessingException {
 
@@ -53,7 +55,7 @@ public class FrontEndController {
     }
 
     @ApiImplicitParams(value = {})
-    @ApiOperation("")
+    @ApiOperation(value = "Showing list of all possible currencies")
     @GetMapping("/api/actuallist")
     public ActualListDto actualList() throws JsonProcessingException {
 
