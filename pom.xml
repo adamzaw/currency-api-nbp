@@ -75,7 +75,7 @@
 
 		<dependency>
 			<groupId>io.jsonwebtoken</groupId>
-			<artifactId>jjwt</artifactId> <!-- or jjwt-gson if Gson is preferred -->
+			<artifactId>jjwt</artifactId>
 			<version>0.9.1</version>
 		</dependency>
 	</dependencies>
@@ -85,6 +85,9 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<finalName>api-nbp</finalName>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>
