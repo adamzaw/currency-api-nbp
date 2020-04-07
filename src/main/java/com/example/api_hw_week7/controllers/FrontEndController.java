@@ -28,7 +28,7 @@ public class FrontEndController {
     @Autowired
     private QueryRepository queryRepository;
 
-       public FrontEndController() throws JsonProcessingException {
+    public FrontEndController() throws JsonProcessingException {
     }
 
 
@@ -47,7 +47,9 @@ public class FrontEndController {
             @ApiImplicitParam(name = "second", value = "ISO 4217 currency code", dataType = "java.lang.String")})
     @ApiOperation(value = "Calculating value of exchange from one currency to another")
     @GetMapping("/api/exchange/{value}/{first}/{second}")
-    public ExchangeResultDto exchange(@PathVariable Double value, @PathVariable String first, @PathVariable String second) throws JsonProcessingException {
+    public ExchangeResultDto exchange(@PathVariable Double value,
+                                      @PathVariable String first, @PathVariable String second)
+            throws JsonProcessingException {
 
         queryRepository.save(new Query("/api/exchange/" + value + "/" + first + "/" + second));
 

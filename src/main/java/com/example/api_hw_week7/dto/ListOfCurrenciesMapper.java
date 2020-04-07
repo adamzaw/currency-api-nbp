@@ -13,10 +13,10 @@ public class ListOfCurrenciesMapper {
 
     public ListOfCurrenciesDto listOfCurrenciesToDto() throws JsonProcessingException {
 
-        ListOfCurrenciesDto listOfCurrencesDto = new ListOfCurrenciesDto();
-        listOfCurrencesDto.listOfCurrencies = rateService.getCurrencies().get(0);
+        ListOfCurrenciesDto listOfCurrenciesDto = new ListOfCurrenciesDto();
+        listOfCurrenciesDto.listOfCurrencies = rateService.getCurrencies().get(0);
 
-        return listOfCurrencesDto;
+        return listOfCurrenciesDto;
     }
 
 }

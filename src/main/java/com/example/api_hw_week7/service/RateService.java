@@ -49,7 +49,7 @@ public class RateService {
 
     public ExchangeRate getExchangeRateByCode(String code) throws JsonProcessingException {
 
-        String url = "http://api.nbp.pl/api/exchangerates/rates/c/"+code+"/today/?format=json";
+        String url = "http://api.nbp.pl/api/exchangerates/rates/c/" + code + "/today/?format=json";
         String jsonStr = restTemplate.getForObject(url, String.class);
 
         exchangeRate = mapper.readValue(jsonStr, new TypeReference<ExchangeRate>() {

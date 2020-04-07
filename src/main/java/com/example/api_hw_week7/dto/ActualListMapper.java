@@ -13,6 +13,7 @@ public class ActualListMapper {
 
     @Autowired
     RateService rateService;
+
     public ActualListDto actualListDto() throws JsonProcessingException {
 
         ActualListDto actualListDto = new ActualListDto();

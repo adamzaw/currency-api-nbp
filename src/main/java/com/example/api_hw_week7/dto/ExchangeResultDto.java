@@ -5,7 +5,7 @@ import lombok.Data;
 @Data
 public class ExchangeResultDto {
 
-public String code;
-public Double result;
+    public String code;
+    public Double result;
 
 }

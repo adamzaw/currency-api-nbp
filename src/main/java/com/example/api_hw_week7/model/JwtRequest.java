@@ -12,7 +12,6 @@ public class JwtRequest implements Serializable {
     @ApiModelProperty(value = "", example = "password")
     private String password;
 
-    //need default constructor for JSON Parsing
     public JwtRequest() {
     }
 
