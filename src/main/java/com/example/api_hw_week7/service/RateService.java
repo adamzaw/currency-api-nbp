@@ -25,7 +25,6 @@ public class RateService {
 
     private List<ListOfCurrencies> currencies;
 
-
     private ExchangeRate exchangeRate;
 
     RestTemplate restTemplate = new RestTemplate();
